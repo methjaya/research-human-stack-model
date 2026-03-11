@@ -1,1 +1,930 @@
 
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Human Stack Model Survey</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Segoe UI', Arial, sans-serif;
+    background: #f0f4f8;
+    color: #1a1a2e;
+    min-height: 100vh;
+  }
+
+  /* ── Top banner ── */
+  .top-banner {
+    background: linear-gradient(135deg, #1a5276 0%, #2874a6 60%, #154360 100%);
+    color: white;
+    padding: 36px 0 28px;
+    text-align: center;
+    box-shadow: 0 4px 18px rgba(26,82,118,0.35);
+  }
+  .top-banner .label {
+    font-size: 11px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: #aed6f1;
+    margin-bottom: 10px;
+  }
+  .top-banner h1 {
+    font-size: 26px;
+    font-weight: 700;
+    line-height: 1.3;
+    margin-bottom: 6px;
+  }
+  .top-banner h1 span { color: #aed6f1; }
+  .top-banner .subtitle {
+    font-size: 14px;
+    color: #d6eaf8;
+    margin-bottom: 16px;
+  }
+  .top-banner .meta {
+    display: inline-flex;
+    gap: 24px;
+    font-size: 12px;
+    color: #aed6f1;
+    background: rgba(255,255,255,0.1);
+    border-radius: 20px;
+    padding: 6px 20px;
+  }
+  .top-banner .meta span::before { content: '• '; }
+  .top-banner .meta span:first-child::before { content: ''; }
+
+  /* ── Progress bar ── */
+  .progress-wrap {
+    background: white;
+    border-bottom: 1px solid #d6eaf8;
+    padding: 0;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+  }
+  .progress-bar-track {
+    height: 5px;
+    background: #eaf2ff;
+  }
+  .progress-bar-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #1a5276, #2874a6);
+    width: 0%;
+    transition: width 0.4s ease;
+    border-radius: 0 3px 3px 0;
+  }
+  .progress-label {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 20px 6px;
+    font-size: 12px;
+    color: #5d6d7e;
+  }
+  .progress-label strong { color: #1a5276; }
+
+  /* ── Main container ── */
+  .container {
+    max-width: 780px;
+    margin: 0 auto;
+    padding: 32px 16px 60px;
+  }
+
+  /* ── Info box ── */
+  .info-box {
+    background: #eaf4fb;
+    border-left: 5px solid #2874a6;
+    border-radius: 0 10px 10px 0;
+    padding: 20px 24px;
+    margin-bottom: 32px;
+    font-size: 13.5px;
+    line-height: 1.7;
+    color: #1a3a4a;
+  }
+  .info-box h3 { color: #1a5276; margin-bottom: 8px; font-size: 14px; }
+  .info-box ul { margin-left: 18px; margin-top: 6px; }
+  .info-box li { margin-bottom: 4px; }
+  .info-pills {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin-top: 12px;
+  }
+  .pill {
+    background: white;
+    border: 1px solid #aed6f1;
+    border-radius: 20px;
+    padding: 4px 14px;
+    font-size: 12px;
+    color: #1a5276;
+    font-weight: 600;
+  }
+
+  /* ── Section card ── */
+  .section-card {
+    background: white;
+    border-radius: 14px;
+    box-shadow: 0 2px 12px rgba(26,82,118,0.08);
+    margin-bottom: 28px;
+    overflow: hidden;
+  }
+  .section-header {
+    padding: 18px 26px 14px;
+    border-bottom: 2px solid #eaf2ff;
+  }
+  .section-header .section-tag {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: #aed6f1;
+    margin-bottom: 4px;
+  }
+  .section-header h2 {
+    font-size: 17px;
+    color: #1a5276;
+    font-weight: 700;
+  }
+  .section-header p {
+    font-size: 13px;
+    color: #5d6d7e;
+    margin-top: 5px;
+    line-height: 1.5;
+  }
+
+  /* ── Layer header inside section ── */
+  .layer-header {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 16px 26px 10px;
+    border-bottom: 1px solid #f0f4f8;
+    margin-top: 4px;
+  }
+  .layer-badge {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 13px;
+    font-weight: 700;
+    color: white;
+    flex-shrink: 0;
+  }
+  .layer-info h4 { font-size: 14px; color: #1a5276; font-weight: 700; }
+  .layer-info p  { font-size: 12px; color: #7f8c8d; margin-top: 2px; line-height: 1.4; }
+
+  /* ── Question ── */
+  .question-wrap {
+    padding: 18px 26px 14px;
+    border-bottom: 1px solid #f5f7fa;
+  }
+  .question-wrap:last-child { border-bottom: none; }
+
+  .question-num {
+    display: inline-block;
+    background: #eaf2ff;
+    color: #1a5276;
+    font-size: 11px;
+    font-weight: 700;
+    border-radius: 4px;
+    padding: 2px 8px;
+    margin-bottom: 8px;
+  }
+  .question-text {
+    font-size: 14px;
+    color: #2c3e50;
+    line-height: 1.6;
+    margin-bottom: 16px;
+    font-weight: 500;
+  }
+
+  /* ── Slider ── */
+  .slider-wrap { position: relative; }
+  .slider-labels {
+    display: flex;
+    justify-content: space-between;
+    font-size: 11px;
+    color: #95a5a6;
+    margin-bottom: 4px;
+  }
+  .rating-track {
+    display: flex;
+    gap: 6px;
+    align-items: center;
+    margin-bottom: 8px;
+  }
+  .rating-btn {
+    flex: 1;
+    height: 40px;
+    border: 2px solid #d6eaf8;
+    background: #f8fbff;
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: 600;
+    color: #7f8c8d;
+    cursor: pointer;
+    transition: all 0.18s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    user-select: none;
+  }
+  .rating-btn:hover {
+    border-color: #2874a6;
+    background: #eaf2ff;
+    color: #1a5276;
+    transform: translateY(-1px);
+  }
+  .rating-btn.selected {
+    color: white;
+    border-color: transparent;
+    transform: translateY(-2px);
+    box-shadow: 0 3px 10px rgba(0,0,0,0.15);
+  }
+  /* Color bands */
+  .rating-btn.selected.r1,.rating-btn.selected.r2,.rating-btn.selected.r3 { background: #e74c3c; }
+  .rating-btn.selected.r4,.rating-btn.selected.r5 { background: #e67e22; }
+  .rating-btn.selected.r6,.rating-btn.selected.r7 { background: #2874a6; }
+  .rating-btn.selected.r8,.rating-btn.selected.r9,.rating-btn.selected.r10 { background: #1e8449; }
+
+  .selected-display {
+    text-align: center;
+    font-size: 12px;
+    color: #95a5a6;
+    height: 18px;
+    transition: color 0.2s;
+  }
+  .selected-display.active { color: #1a5276; font-weight: 600; }
+
+  /* ── Dropdown ── */
+  .form-group { padding: 16px 26px 12px; border-bottom: 1px solid #f5f7fa; }
+  .form-group:last-child { border-bottom: none; }
+  .form-label {
+    font-size: 13px;
+    font-weight: 600;
+    color: #2c3e50;
+    margin-bottom: 8px;
+    display: block;
+  }
+  .form-label .req { color: #e74c3c; margin-left: 3px; }
+  select, input[type="text"], input[type="number"] {
+    width: 100%;
+    padding: 11px 16px;
+    border: 2px solid #d6eaf8;
+    border-radius: 8px;
+    font-size: 14px;
+    font-family: inherit;
+    color: #2c3e50;
+    background: #f8fbff;
+    appearance: none;
+    -webkit-appearance: none;
+    transition: border-color 0.2s, box-shadow 0.2s;
+    outline: none;
+  }
+  select {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath fill='%232874a6' d='M6 8L0 0h12z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 14px center;
+    padding-right: 36px;
+    cursor: pointer;
+  }
+  select:focus, input:focus {
+    border-color: #2874a6;
+    box-shadow: 0 0 0 3px rgba(40,116,166,0.12);
+    background: white;
+  }
+
+  /* ── Success % input ── */
+  .success-input-wrap {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .success-input-wrap input[type="number"] {
+    width: 120px;
+    font-size: 22px;
+    font-weight: 700;
+    text-align: center;
+    color: #1a5276;
+  }
+  .pct-label { font-size: 28px; color: #1a5276; font-weight: 700; }
+  .success-hint { font-size: 12px; color: #95a5a6; margin-top: 6px; }
+
+  /* ── Scale guide ── */
+  .scale-guide {
+    display: flex;
+    gap: 8px;
+    margin: 0 26px 16px;
+    flex-wrap: wrap;
+  }
+  .scale-chip {
+    padding: 5px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+  }
+  .chip-red    { background: #fadbd8; color: #c0392b; }
+  .chip-orange { background: #fdebd0; color: #d35400; }
+  .chip-blue   { background: #d6eaf8; color: #1a5276; }
+  .chip-green  { background: #d5f5e3; color: #1e8449; }
+
+  /* ── Submit button ── */
+  .submit-wrap {
+    text-align: center;
+    margin-top: 36px;
+  }
+  .btn-submit {
+    background: linear-gradient(135deg, #1a5276, #2874a6);
+    color: white;
+    border: none;
+    padding: 16px 56px;
+    font-size: 16px;
+    font-weight: 700;
+    font-family: inherit;
+    border-radius: 50px;
+    cursor: pointer;
+    box-shadow: 0 6px 20px rgba(26,82,118,0.35);
+    transition: transform 0.2s, box-shadow 0.2s;
+    letter-spacing: 0.5px;
+  }
+  .btn-submit:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 28px rgba(26,82,118,0.45);
+  }
+  .btn-submit:active { transform: translateY(0); }
+  .submit-note { font-size: 12px; color: #95a5a6; margin-top: 12px; }
+
+  /* ── Validation error ── */
+  .error-msg {
+    display: none;
+    color: #e74c3c;
+    font-size: 12px;
+    margin-top: 6px;
+    padding-left: 4px;
+  }
+  .has-error select, .has-error input { border-color: #e74c3c !important; }
+  .has-error .error-msg { display: block; }
+
+  /* ── Thank you screen ── */
+  #thank-you {
+    display: none;
+    text-align: center;
+    padding: 60px 24px;
+  }
+  .ty-icon { font-size: 64px; margin-bottom: 20px; }
+  .ty-title { font-size: 26px; font-weight: 700; color: #1a5276; margin-bottom: 12px; }
+  .ty-sub { font-size: 15px; color: #5d6d7e; max-width: 480px; margin: 0 auto 28px; line-height: 1.7; }
+  .ty-scores { background: #eaf4fb; border-radius: 12px; padding: 24px; max-width: 520px; margin: 0 auto; }
+  .ty-scores h4 { font-size: 14px; color: #1a5276; margin-bottom: 16px; font-weight: 700; }
+  .score-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+    font-size: 14px;
+  }
+  .score-row .s-label { color: #5d6d7e; }
+  .score-row .s-val {
+    font-weight: 700;
+    font-size: 16px;
+    color: #1a5276;
+    min-width: 60px;
+    text-align: right;
+  }
+  .hss-total {
+    border-top: 2px solid #aed6f1;
+    padding-top: 12px;
+    margin-top: 6px;
+    font-size: 16px;
+    color: #1a5276;
+    font-weight: 700;
+  }
+  .hss-total .s-val { font-size: 22px; color: #154360; }
+
+  /* ── Responsive ── */
+  @media(max-width:600px){
+    .top-banner h1 { font-size: 20px; }
+    .rating-btn { height: 36px; font-size: 12px; }
+    .container { padding: 20px 10px 50px; }
+    .section-header, .question-wrap, .form-group, .layer-header { padding-left: 16px; padding-right: 16px; }
+    .scale-guide { margin-left: 16px; margin-right: 16px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- Top Banner -->
+<div class="top-banner">
+  <div class="label">MBA Research Study </div>
+  <h1>The Human Stack Model Survey<br><span>IT Project Manager Self-Assessment</span></h1>
+<!--  <div class="subtitle">Researcher: Methmina Jayawardhana &nbsp;|&nbsp; [University Name]</div>  -->
+  <div class="meta">
+    <span>~12 minutes</span>
+    <span>13 questions</span>
+    <span>Fully anonymous</span>
+    <span>Academic research only</span>
+  </div>
+</div>
+
+<!-- Progress bar -->
+<div class="progress-wrap">
+  <div class="progress-label">
+    <span id="progress-text">Progress</span>
+    <strong id="progress-pct">0% complete</strong>
+  </div>
+  <div class="progress-bar-track">
+    <div class="progress-bar-fill" id="progress-fill"></div>
+  </div>
+</div>
+
+<div class="container">
+<div id="survey-form">
+
+  <!-- Info box -->
+  <div class="info-box">
+    <h3>About This Survey</h3>
+    <p>This survey is part of an MBA research study introducing the <strong>Human Stack Model</strong> — a framework proposing that IT project success is determined by five interdependent human layers, from Technical Competency to Psychological Wellbeing. Your responses will help validate the model's core propositions.</p>
+    <ul>
+      <li>All responses are <strong>completely anonymous</strong>. No personally identifying information is collected.</li>
+      <li>Data are used solely for academic research purposes and will be reported in aggregate form only.</li>
+      <li>Please answer based on your genuine professional experience. There are no right or wrong answers.</li>
+    </ul>
+    <div class="info-pills">
+      <span class="pill">🔒 Anonymous</span>
+      <span class="pill">🎓 Academic use only</span>
+      <span class="pill">⏱ ~12 minutes</span>
+      <span class="pill">📋 13 questions</span>
+    </div>
+  </div>
+
+  <!-- ════ SECTION A ════ -->
+  <div class="section-card">
+    <div class="section-header">
+      <div class="section-tag">Section A</div>
+      <h2>Respondent Profile</h2>
+      <p>Please provide a few brief details about your professional background. These responses help contextualize your survey data.</p>
+    </div>
+
+    <div class="form-group" data-q="A1">
+      <label class="form-label">A1. &nbsp;Years of experience managing IT projects <span class="req">*</span></label>
+      <select id="A1">
+        <option value="">— Please select —</option>
+        <option value="Less than 1 year">Less than 1 year</option>
+        <option value="1 to 2 years">1 to 2 years</option>
+        <option value="3 to 5 years">3 to 5 years</option>
+        <option value="6 to 10 years">6 to 10 years</option>
+        <option value="More than 10 years">More than 10 years</option>
+      </select>
+      <div class="error-msg">Please select your years of experience.</div>
+    </div>
+
+    <div class="form-group" data-q="A2">
+      <label class="form-label">A2. &nbsp;Primary industry sector <span class="req">*</span></label>
+      <select id="A2">
+        <option value="">— Please select —</option>
+        <option>Software Development</option>
+        <option>Banking and Financial Services</option>
+        <option>Healthcare IT</option>
+        <option>Telecommunications</option>
+        <option>Government and Public Sector</option>
+        <option>Management Consulting</option>
+        <option>Retail Technology</option>
+        <option>Education Technology</option>
+        <option>Insurance IT</option>
+        <option>Manufacturing IT</option>
+        <option>Other</option>
+      </select>
+      <div class="error-msg">Please select your industry sector.</div>
+    </div>
+
+    <div class="form-group" data-q="A3">
+      <label class="form-label">A3. &nbsp;Typical team size on your projects <span class="req">*</span></label>
+      <select id="A3">
+        <option value="">— Please select —</option>
+        <option value="1 to 5">1 to 5 people</option>
+        <option value="6 to 10">6 to 10 people</option>
+        <option value="11 to 15">11 to 15 people</option>
+        <option value="16 to 20">16 to 20 people</option>
+        <option value="More than 20">More than 20 people</option>
+      </select>
+      <div class="error-msg">Please select your typical team size.</div>
+    </div>
+
+    <div class="form-group" data-q="A4">
+      <label class="form-label">A4. &nbsp;Highest level of formal education or professional qualification <span class="req">*</span></label>
+      <input type="text" id="A4" placeholder="e.g. MBA, BSc Computer Science, PMP Certification..." />
+      <div class="error-msg">Please enter your highest qualification.</div>
+    </div>
+  </div>
+
+  <!-- ════ SECTION B ════ -->
+  <div class="section-card">
+    <div class="section-header">
+      <div class="section-tag">Section B</div>
+      <h2>Human Stack Self-Assessment</h2>
+      <p>Please rate yourself on each item below using a scale of 1 to 10. Click the number that best reflects your honest self-assessment.</p>
+    </div>
+
+    <!-- Scale guide -->
+    <div class="scale-guide" style="padding-top:14px;">
+      <span class="scale-chip chip-red">1–3: Low</span>
+      <span class="scale-chip chip-orange">4–5: Below Average</span>
+      <span class="scale-chip chip-blue">6–7: Good</span>
+      <span class="scale-chip chip-green">8–10: Excellent</span>
+    </div>
+
+    <!-- Layer 1 -->
+    <div class="layer-header">
+      <div class="layer-badge" style="background:#2874a6;">L1</div>
+      <div class="layer-info">
+        <h4>Layer 1: Technical Competency</h4>
+        <p>Domain knowledge, tools, software architecture, and technology skills relevant to your IT projects.</p>
+      </div>
+    </div>
+
+    <div class="question-wrap" data-q="B1">
+      <span class="question-num">B1</span>
+      <div class="question-text">How would you rate your overall technical knowledge and skills as they apply to the IT projects you manage?</div>
+      <div class="slider-wrap">
+        <div class="slider-labels"><span>1 — Very Low</span><span>10 — Excellent</span></div>
+        <div class="rating-track" id="track-B1"></div>
+        <div class="selected-display" id="disp-B1">Click a number to rate</div>
+      </div>
+      <div class="error-msg">Please select a rating for this question.</div>
+    </div>
+
+    <div class="question-wrap" data-q="B2">
+      <span class="question-num">B2</span>
+      <div class="question-text">How confident are you in understanding the technical components, architecture, and constraints of your projects?</div>
+      <div class="slider-wrap">
+        <div class="slider-labels"><span>1 — Very Low</span><span>10 — Excellent</span></div>
+        <div class="rating-track" id="track-B2"></div>
+        <div class="selected-display" id="disp-B2">Click a number to rate</div>
+      </div>
+      <div class="error-msg">Please select a rating for this question.</div>
+    </div>
+
+    <!-- Layer 2 -->
+    <div class="layer-header" style="margin-top:10px;">
+      <div class="layer-badge" style="background:#1f618d;">L2</div>
+      <div class="layer-info">
+        <h4>Layer 2: Project Management Competency</h4>
+        <p>Planning, scheduling, scope management, risk management, and methodology application (Agile, PMBOK, PRINCE2, Scrum).</p>
+      </div>
+    </div>
+
+    <div class="question-wrap" data-q="B3">
+      <span class="question-num">B3</span>
+      <div class="question-text">How would you rate your ability to plan, schedule, manage scope, identify risks, and control quality on IT projects?</div>
+      <div class="slider-wrap">
+        <div class="slider-labels"><span>1 — Very Low</span><span>10 — Excellent</span></div>
+        <div class="rating-track" id="track-B3"></div>
+        <div class="selected-display" id="disp-B3">Click a number to rate</div>
+      </div>
+      <div class="error-msg">Please select a rating for this question.</div>
+    </div>
+
+    <div class="question-wrap" data-q="B4">
+      <span class="question-num">B4</span>
+      <div class="question-text">How effectively do you apply project management methodologies such as Agile, Scrum, PRINCE2, or PMBOK in your day-to-day work?</div>
+      <div class="slider-wrap">
+        <div class="slider-labels"><span>1 — Very Low</span><span>10 — Excellent</span></div>
+        <div class="rating-track" id="track-B4"></div>
+        <div class="selected-display" id="disp-B4">Click a number to rate</div>
+      </div>
+      <div class="error-msg">Please select a rating for this question.</div>
+    </div>
+
+    <!-- Layer 3 -->
+    <div class="layer-header" style="margin-top:10px;">
+      <div class="layer-badge" style="background:#1a5276;">L3</div>
+      <div class="layer-info">
+        <h4>Layer 3: People Management Competency</h4>
+        <p>Communication, leadership, conflict resolution, stakeholder management, and team motivation.</p>
+      </div>
+    </div>
+
+    <div class="question-wrap" data-q="B5">
+      <span class="question-num">B5</span>
+      <div class="question-text">How would you rate your ability to communicate clearly and effectively with your team members and project stakeholders?</div>
+      <div class="slider-wrap">
+        <div class="slider-labels"><span>1 — Very Low</span><span>10 — Excellent</span></div>
+        <div class="rating-track" id="track-B5"></div>
+        <div class="selected-display" id="disp-B5">Click a number to rate</div>
+      </div>
+      <div class="error-msg">Please select a rating for this question.</div>
+    </div>
+
+    <div class="question-wrap" data-q="B6">
+      <span class="question-num">B6</span>
+      <div class="question-text">How effectively do you manage conflict, motivate team members, and build productive working relationships within your projects?</div>
+      <div class="slider-wrap">
+        <div class="slider-labels"><span>1 — Very Low</span><span>10 — Excellent</span></div>
+        <div class="rating-track" id="track-B6"></div>
+        <div class="selected-display" id="disp-B6">Click a number to rate</div>
+      </div>
+      <div class="error-msg">Please select a rating for this question.</div>
+    </div>
+
+    <!-- Layer 4 -->
+    <div class="layer-header" style="margin-top:10px;">
+      <div class="layer-badge" style="background:#154360;">L4</div>
+      <div class="layer-info">
+        <h4>Layer 4: Psychological Wellbeing</h4>
+        <p>Psychological safety, stress management, resilience, and team mental health during project work.</p>
+      </div>
+    </div>
+
+    <div class="question-wrap" data-q="B7">
+      <span class="question-num">B7</span>
+      <div class="question-text">How would you rate your overall psychological wellbeing and capacity to manage stress and pressure during project work?</div>
+      <div class="slider-wrap">
+        <div class="slider-labels"><span>1 — Very Low</span><span>10 — Excellent</span></div>
+        <div class="rating-track" id="track-B7"></div>
+        <div class="selected-display" id="disp-B7">Click a number to rate</div>
+      </div>
+      <div class="error-msg">Please select a rating for this question.</div>
+    </div>
+
+    <div class="question-wrap" data-q="B8">
+      <span class="question-num">B8</span>
+      <div class="question-text">To what extent does your project team operate in a psychologically safe environment where members can raise concerns, admit mistakes, and speak up freely?</div>
+      <div class="slider-wrap">
+        <div class="slider-labels"><span>1 — Very Low</span><span>10 — Excellent</span></div>
+        <div class="rating-track" id="track-B8"></div>
+        <div class="selected-display" id="disp-B8">Click a number to rate</div>
+      </div>
+      <div class="error-msg">Please select a rating for this question.</div>
+    </div>
+  </div>
+
+  <!-- ════ SECTION C ════ -->
+  <div class="section-card">
+    <div class="section-header">
+      <div class="section-tag">Section C</div>
+      <h2>Project Outcome Assessment</h2>
+      <p>This section asks you to reflect on the outcomes of your most recently completed IT project.</p>
+    </div>
+
+    <div class="form-group" data-q="C1">
+      <label class="form-label">
+        C1. &nbsp;Overall Project Success Percentage <span class="req">*</span>
+      </label>
+      <p style="font-size:13px;color:#5d6d7e;margin-bottom:14px;line-height:1.6;">
+        Thinking about your most recently completed IT project, please estimate its overall success as a percentage from 0 to 100. Consider all four dimensions: <strong>(1) on-time delivery</strong>, <strong>(2) within budget</strong>, <strong>(3) feature quality and completeness</strong>, and <strong>(4) stakeholder satisfaction</strong>. A score of 100 means full success across all four dimensions.
+      </p>
+      <div class="success-input-wrap">
+        <input type="number" id="C1" min="0" max="100" placeholder="0–100" />
+        <span class="pct-label">%</span>
+      </div>
+      <div class="success-hint">Enter a whole number between 0 and 100.</div>
+      <div class="error-msg">Please enter a project success percentage between 0 and 100.</div>
+    </div>
+  </div>
+
+  <!-- Submit -->
+  <div class="submit-wrap">
+    <button class="btn-submit" onclick="submitSurvey()">Submit My Responses →</button>
+    <div class="submit-note">By submitting, you confirm that your responses are your own and that you consent to their use for academic research purposes. All data are anonymous.</div>
+  </div>
+
+</div><!-- end survey-form -->
+
+<!-- Thank you screen -->
+<div id="thank-you">
+  <div class="ty-icon">✅</div>
+  <div class="ty-title">Thank You, Respondent!</div>
+  <div class="ty-sub">Your response has been successfully recorded. Your contribution is greatly valued and will help advance understanding of the human dimensions of IT project management.</div>
+  <div class="ty-scores">
+    <h4>Your Human Stack Score Summary</h4>
+    <div class="score-row"><span class="s-label">Layer 1 — Technical Competency (TSS)</span><span class="s-val" id="ty-tss">—</span></div>
+    <div class="score-row"><span class="s-label">Layer 2 — PM Competency (PCS)</span><span class="s-val" id="ty-pcs">—</span></div>
+    <div class="score-row"><span class="s-label">Layer 3 — People Management (PMS)</span><span class="s-val" id="ty-pms">—</span></div>
+    <div class="score-row"><span class="s-label">Layer 4 — Psychological Wellbeing (PWS)</span><span class="s-val" id="ty-pws">—</span></div>
+    <div class="score-row hss-total"><span class="s-label">Composite Human Stack Score (HSS)</span><span class="s-val" id="ty-hss">—</span></div>
+    <div class="score-row" style="margin-top:10px;"><span class="s-label">Project Success (%)</span><span class="s-val" id="ty-succ">—</span></div>
+    <p style="font-size:11px;color:#95a5a6;margin-top:16px;">HSS = (0.15 × TSS) + (0.20 × PCS) + (0.30 × PMS) + (0.35 × PWS)</p>
+  </div>
+</div>
+
+
+<!-- ══════════════════════════════════════════════════════════════
+     NETLIFY FORMS — hidden form so Netlify detects all field names
+     at build/deploy time. The actual POST is done via fetch() in JS.
+     Do not remove this block.
+     ══════════════════════════════════════════════════════════════ -->
+<form name="human-stack-survey" data-netlify="true" data-netlify-honeypot="bot-field" hidden>
+  <input type="hidden" name="form-name"        value="human-stack-survey" />
+  <input type="hidden" name="bot-field" />
+  <!-- Section A -->
+  <input type="hidden" name="A1_years_experience" />
+  <input type="hidden" name="A2_industry_sector" />
+  <input type="hidden" name="A3_team_size" />
+  <input type="hidden" name="A4_qualification" />
+  <!-- Section B — individual item ratings -->
+  <input type="hidden" name="B1_technical_knowledge" />
+  <input type="hidden" name="B2_technical_confidence" />
+  <input type="hidden" name="B3_pm_planning" />
+  <input type="hidden" name="B4_pm_methodology" />
+  <input type="hidden" name="B5_people_communication" />
+  <input type="hidden" name="B6_people_conflict_motivation" />
+  <input type="hidden" name="B7_psych_wellbeing" />
+  <input type="hidden" name="B8_psych_safety" />
+  <!-- Computed layer scores -->
+  <input type="hidden" name="TSS_technical_skills_score" />
+  <input type="hidden" name="PCS_pm_competency_score" />
+  <input type="hidden" name="PMS_people_mgmt_score" />
+  <input type="hidden" name="PWS_psych_wellbeing_score" />
+  <input type="hidden" name="HSS_human_stack_score" />
+  <!-- Section C -->
+  <input type="hidden" name="C1_project_success_pct" />
+  <!-- Metadata -->
+  <input type="hidden" name="submission_timestamp" />
+</form>
+
+</div><!-- container -->
+
+<script>
+// ── Build rating buttons ──────────────────────────────────────────────────
+const ratingQuestions = ['B1','B2','B3','B4','B5','B6','B7','B8'];
+const ratings = {};
+
+const labels = {
+  1:'Very Low',2:'Low',3:'Below Average',4:'Average',5:'Slightly Below Average',
+  6:'Above Average',7:'Good',8:'Very Good',9:'Excellent',10:'Outstanding'
+};
+
+ratingQuestions.forEach(q => {
+  ratings[q] = null;
+  const track = document.getElementById('track-' + q);
+  for(let i = 1; i <= 10; i++){
+    const btn = document.createElement('button');
+    btn.type = 'button';
+    btn.className = 'rating-btn r' + i;
+    btn.textContent = i;
+    btn.dataset.val = i;
+    btn.dataset.q = q;
+    btn.onclick = function(){
+      ratings[q] = i;
+      track.querySelectorAll('.rating-btn').forEach(b => b.classList.remove('selected'));
+      btn.classList.add('selected');
+      const disp = document.getElementById('disp-' + q);
+      disp.textContent = i + ' / 10 — ' + labels[i];
+      disp.classList.add('active');
+      // Clear error
+      const wrap = btn.closest('[data-q]');
+      if(wrap) wrap.classList.remove('has-error');
+      updateProgress();
+    };
+    track.appendChild(btn);
+  }
+});
+
+// ── Progress ──────────────────────────────────────────────────────────────
+const totalQ = 13; // 4 profile + 8 ratings + 1 success
+function countAnswered(){
+  let n = 0;
+  ['A1','A2','A3'].forEach(id => { if(document.getElementById(id).value) n++; });
+  if(document.getElementById('A4').value.trim()) n++;
+  ratingQuestions.forEach(q => { if(ratings[q] !== null) n++; });
+  const c1 = document.getElementById('C1').value;
+  if(c1 !== '' && +c1 >= 0 && +c1 <= 100) n++;
+  return n;
+}
+function updateProgress(){
+  const n = countAnswered();
+  const pct = Math.round((n / totalQ) * 100);
+  document.getElementById('progress-fill').style.width = pct + '%';
+  document.getElementById('progress-pct').textContent = pct + '% complete';
+  if(n < 4) document.getElementById('progress-text').textContent = 'Section A: Respondent Profile';
+  else if(n < 12) document.getElementById('progress-text').textContent = 'Section B: Human Stack Self-Assessment';
+  else document.getElementById('progress-text').textContent = 'Section C: Project Outcome';
+}
+
+['A1','A2','A3'].forEach(id => {
+  document.getElementById(id).addEventListener('change', updateProgress);
+});
+document.getElementById('A4').addEventListener('input', updateProgress);
+document.getElementById('C1').addEventListener('input', updateProgress);
+
+// ── Validate & submit ─────────────────────────────────────────────────────
+function submitSurvey(){
+  let valid = true;
+
+  // Profile dropdowns
+  ['A1','A2','A3'].forEach(id => {
+    const wrap = document.querySelector('[data-q="'+id+'"]');
+    const el = document.getElementById(id);
+    if(!el.value){ wrap.classList.add('has-error'); valid = false; }
+    else wrap.classList.remove('has-error');
+  });
+  // A4 text
+  const a4wrap = document.querySelector('[data-q="A4"]');
+  if(!document.getElementById('A4').value.trim()){ a4wrap.classList.add('has-error'); valid = false; }
+  else a4wrap.classList.remove('has-error');
+
+  // Ratings
+  ratingQuestions.forEach(q => {
+    const wrap = document.querySelector('[data-q="'+q+'"]');
+    if(ratings[q] === null){ wrap.classList.add('has-error'); valid = false; }
+    else wrap.classList.remove('has-error');
+  });
+
+  // C1
+  const c1wrap = document.querySelector('[data-q="C1"]');
+  const c1val = document.getElementById('C1').value;
+  if(c1val === '' || +c1val < 0 || +c1val > 100){ c1wrap.classList.add('has-error'); valid = false; }
+  else c1wrap.classList.remove('has-error');
+
+  if(!valid){
+    document.querySelector('.has-error').scrollIntoView({ behavior:'smooth', block:'center' });
+    return;
+  }
+
+  // ── Compute layer scores ──────────────────────────────────────────────
+  const tss = (ratings['B1'] + ratings['B2']) / 2;
+  const pcs = (ratings['B3'] + ratings['B4']) / 2;
+  const pms = (ratings['B5'] + ratings['B6']) / 2;
+  const pws = (ratings['B7'] + ratings['B8']) / 2;
+  const hss = (0.15*tss + 0.20*pcs + 0.30*pms + 0.35*pws).toFixed(2);
+  const successVal = document.getElementById('C1').value;
+
+  // ── Disable button and show loading state ────────────────────────────
+  const btn = document.querySelector('.btn-submit');
+  btn.textContent = 'Submitting…';
+  btn.disabled = true;
+  btn.style.opacity = '0.7';
+
+  // ── Build form payload for Netlify Forms ─────────────────────────────
+  // Netlify Forms expects application/x-www-form-urlencoded with form-name
+  const payload = new URLSearchParams({
+    'form-name':                    'human-stack-survey',
+    'bot-field':                    '',   // honeypot — must be empty
+    // Section A
+    'A1_years_experience':          document.getElementById('A1').value,
+    'A2_industry_sector':           document.getElementById('A2').value,
+    'A3_team_size':                 document.getElementById('A3').value,
+    'A4_qualification':             document.getElementById('A4').value,
+    // Section B — individual items
+    'B1_technical_knowledge':       String(ratings['B1']),
+    'B2_technical_confidence':      String(ratings['B2']),
+    'B3_pm_planning':               String(ratings['B3']),
+    'B4_pm_methodology':            String(ratings['B4']),
+    'B5_people_communication':      String(ratings['B5']),
+    'B6_people_conflict_motivation':String(ratings['B6']),
+    'B7_psych_wellbeing':           String(ratings['B7']),
+    'B8_psych_safety':              String(ratings['B8']),
+    // Computed scores (pre-calculated so you see them directly in dashboard)
+    'TSS_technical_skills_score':   tss.toFixed(1),
+    'PCS_pm_competency_score':      pcs.toFixed(1),
+    'PMS_people_mgmt_score':        pms.toFixed(1),
+    'PWS_psych_wellbeing_score':    pws.toFixed(1),
+    'HSS_human_stack_score':        hss,
+    // Section C
+    'C1_project_success_pct':       successVal,
+    // Metadata
+    'submission_timestamp':         new Date().toISOString(),
+  });
+
+  // ── POST to Netlify Forms ────────────────────────────────────────────
+  fetch('/', {
+    method:  'POST',
+    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+    body:    payload.toString()
+  })
+  .then(response => {
+    if(!response.ok) throw new Error('Network response was not ok: ' + response.status);
+
+    // ── Show thank-you screen ──────────────────────────────────────────
+    document.getElementById('ty-tss').textContent  = tss.toFixed(1)  + ' / 10';
+    document.getElementById('ty-pcs').textContent  = pcs.toFixed(1)  + ' / 10';
+    document.getElementById('ty-pms').textContent  = pms.toFixed(1)  + ' / 10';
+    document.getElementById('ty-pws').textContent  = pws.toFixed(1)  + ' / 10';
+    document.getElementById('ty-hss').textContent  = hss             + ' / 10';
+    document.getElementById('ty-succ').textContent = successVal       + '%';
+
+    document.getElementById('survey-form').style.display = 'none';
+    document.getElementById('thank-you').style.display   = 'block';
+    document.getElementById('progress-fill').style.width = '100%';
+    document.getElementById('progress-pct').textContent  = '100% complete';
+    document.getElementById('progress-text').textContent = 'Survey completed — thank you!';
+    window.scrollTo({ top:0, behavior:'smooth' });
+  })
+  .catch(err => {
+    // Restore button so respondent can retry
+    btn.textContent = 'Submit My Responses →';
+    btn.disabled    = false;
+    btn.style.opacity = '1';
+    alert('Something went wrong submitting your response. Please check your connection and try again.\n\nError: ' + err.message);
+    console.error('Netlify Forms submission error:', err);
+  });
+}
+</script>
+</body>
+</html>
